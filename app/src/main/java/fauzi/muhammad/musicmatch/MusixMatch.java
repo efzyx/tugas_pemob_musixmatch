@@ -31,21 +31,10 @@ public class MusixMatch{
 
     }
 
-    static void ambilData(String t){
+    static void ambilData(Callback<Music> callback, String t){
         Call<Music> call = mmClient.listMusicSearchByTitle(t);
 
-        call.enqueue(new Callback<Music>() {
-            @Override
-            public void onResponse(Call<Music> call, Response<Music> response) {
-                Music object =  response.body();
-            }
-
-            @Override
-            public void onFailure(Call<Music> call, Throwable t) {
-                Log.d("MAIN", t.getMessage());
-
-            }
-        });
+        call.enqueue(callback);
     }
 
 

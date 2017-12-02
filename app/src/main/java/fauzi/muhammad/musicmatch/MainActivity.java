@@ -7,16 +7,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.orm.query.Select;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
-import fauzi.muhammad.musicmatch.Music.Body;
 import fauzi.muhammad.musicmatch.Music.Music;
 import fauzi.muhammad.musicmatch.Music.MusicGenreList;
 import fauzi.muhammad.musicmatch.Music.Track;
@@ -46,11 +44,12 @@ public class MainActivity extends AppCompatActivity {
         tipe.setAdapter(adapter);
         if(isConnected()){
             Log.d("AMBIL", "AMBIL DATA DARI SERVER");
-            MusixMatch.ambilData(getMusicCallback());
+//            MusixMatch.ambilData(getMusicCallback());
+            MusixMatch.ambilData(getMusicCallback(), "Justin Bieber");
             return;
         }
         Log.d("AMBIL", "AMBIL DATA DARI DATABASE");
-        setViewList(getAllFromDB(), true);
+        setViewList(getAllFromDB());
 
 
     }
@@ -65,26 +64,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(new RVAdapter(this, trackList ));
     }
 
-    void setViewList(List<Track> trackList, Boolean isFromDB){
-//        Log.d("MAIN", "Lagu : "+trackList.get(0).getTrack().getTrackName());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setStackFromEnd(true);
-        recyclerView = findViewById(R.id.rv_hasil_cari);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new RVAdapter(this, trackList, isFromDB));
-    }
 
-    void saveToDB(Body body){
-        List<TrackList> trackList = body.getTrackList();
+    void saveToDB(List<TrackList> trackList){
 
         for (int i = 0; i < trackList.size(); i++) {
             Log.d("MAIN", trackList.get(i).getTrack().getTrackName());
             Track track = trackList.get(i).getTrack();
             Log.d("MAIN", "Track  : " +track.getTrackName());
             List<Track> listInDb = Track.find(Track.class, "track_id = ?", track.getTrackId());
-//            Track track1 = Track.findById(Track.class, 1);
-//
-//
             Log.d("MAIN", "Track ID yang ditemukan : " +track.getTrackId());
             Log.d("MAIN", "List yang ditemukan : " +String.valueOf(listInDb.size()));
             if(listInDb.isEmpty()){
@@ -122,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Music> call, Response<Music> response) {
                 Music object =  response.body();
 
-                saveToDB(object.getMessage().getBody());
+                saveToDB(object.getMessage().getBody().getTrackList());
                 setViewList(object.getMessage().getBody().getTrackList());
 
             }
@@ -135,16 +122,13 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    List<Track> getAllFromDB(){
-        List<Track> trackList= Select.from(Track.class).list();
-        return trackList;
-//        long track = TrackMusicGenrePrimary.count(Track.class);
-//        Track track1 = Select.from(Track.class).first();
-//        TrackMusicGenrePrimary trackMusicGenrePrimary = Select.from(TrackMusicGenrePrimary.class)
-//                .first();
-//        while (trackList.hasNext()){
-//            Log.d("MAIN", "INI LAGU : "+trackList.next().getTrackId());
-//        }
+    List<TrackList> getAllFromDB(){
+        List<TrackList> trackLists = new ArrayList();
+        List<Track> tracks = Select.from(Track.class).list();
+        for (int i = 0; i < tracks.size(); i++) {
+            trackLists.add(new TrackList(tracks));
+        }
+        return trackLists;
 
     }
 

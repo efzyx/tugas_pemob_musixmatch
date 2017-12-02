@@ -4,12 +4,20 @@ package fauzi.muhammad.musicmatch.Music;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class TrackList {
 
     @SerializedName("track")
     @Expose
     private Track track;
 
+    public TrackList(List<Track> tracks){
+
+    }
+    public TrackList(Track track){
+        this.track = track;
+    }
     public Track getTrack() {
         return track;
     }
