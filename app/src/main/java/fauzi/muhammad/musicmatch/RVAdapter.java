@@ -2,21 +2,19 @@ package fauzi.muhammad.musicmatch;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import fauzi.muhammad.musicmatch.Model.PrimaryGenres;
-import fauzi.muhammad.musicmatch.Model.SecondaryGenres;
 import fauzi.muhammad.musicmatch.Model.Track;
 import fauzi.muhammad.musicmatch.Model.TrackList;
 
@@ -39,15 +37,22 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
         return item;
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)  {
         Item item = (Item) holder;
         Track track = tracks.get(position).getTrack();
 
-        item.setSerializedData(track);
+        item.setTrackId(track.getTrackId());
         item.textViewLagu.setText(track.getTrackName());
         item.textViewArtis.setText(track.getArtistName());
         Picasso.with(context).load(track.getAlbumCoverart100x100()).into(item.imageView);
+//        item.ratingBar.setBackgroundColor(context.getResources().getColor(R.color.pinkMu));
+        item.ratingBar.setRating(track.getTrackRating()/20);
+        if(position==getItemCount()){
+//            item.progressBar.setVisibility(View.INVISIBLE);
+//            item.progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -60,7 +65,10 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
         TextView textViewArtis;
         ImageView imageView;
         Context context;
-        Track serializedData;
+        String trackId;
+        RatingBar ratingBar;
+        RecyclerView recyclerView;
+        ProgressBar progressBar;
         public Item(View viewItem, Context context){
             super(viewItem);
             this.context = context;
@@ -68,27 +76,21 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
             textViewLagu = viewItem.findViewById(R.id.lagu_text);
             textViewArtis = viewItem.findViewById(R.id.textViewArtis);
             imageView = viewItem.findViewById(R.id.imageView);
+            ratingBar = viewItem.findViewById(R.id.ratingBar);
+            recyclerView = viewItem.findViewById(R.id.rv_hasil_cari);
+            progressBar = viewItem.findViewById(R.id.progressBar);
 
 
         }
 
-        void setSerializedData(Track serializedData){
-            this.serializedData = serializedData;
+        private void setTrackId(String trackId){
+            this.trackId = trackId;
         }
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition();
             Intent intent = new Intent(this.context, DetailActivity.class);
-            Log.d("MAINSERIAL", serializedData.getTrackName());
-            SecondaryGenres secondaryGenres = this.serializedData.getSecondaryGenres();
-            PrimaryGenres primaryGenres = this.serializedData.getPrimaryGenres();
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("track", this.serializedData);
-//            bundle.putSerializable("primaryGenres", primaryGenres);
-//            bundle.putSerializable("secondaryGenres", secondaryGenres);
-//            intent.putExtras(bundle);
-            intent.putExtra("judul", serializedData.getTrackName());
+            intent.putExtra("track_id", trackId);
             context.startActivity(intent);
         }
     }

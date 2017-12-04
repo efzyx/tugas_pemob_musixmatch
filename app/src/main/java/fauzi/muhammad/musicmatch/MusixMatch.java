@@ -1,6 +1,7 @@
 package fauzi.muhammad.musicmatch;
 
 import fauzi.muhammad.musicmatch.Interface.MMClient;
+import fauzi.muhammad.musicmatch.Model.Lirik;
 import fauzi.muhammad.musicmatch.Model.Music;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,5 +35,10 @@ public class MusixMatch{
         call.enqueue(callback);
     }
 
+    static void getLirik(Callback<Lirik> callback, String t){
+        Call<Lirik> call = mmClient.getLirik(t);
+
+        call.enqueue(callback);
+    }
 
 }

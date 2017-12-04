@@ -3,7 +3,7 @@
     <color name="colorPrimary">#f4e44e</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="pinkMu">#FFFF0E83</color>
-    <color name="orangeTerang">#FFFF6633</color>
+    <color name="pinkMu">#ff0e83</color>
+    <color name="orangeTerang">#ff6633</color>
 
 </resources>

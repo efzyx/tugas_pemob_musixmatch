@@ -1,5 +1,6 @@
 package fauzi.muhammad.musicmatch.Model;
 
+import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.NotNull;
 import com.orm.dsl.Table;
@@ -10,18 +11,29 @@ import com.orm.dsl.Table;
 
 @Table
 public class TrackMusicGenrePrimary extends SugarRecord {
+
+    @SerializedName("track_id")
     @NotNull
-    Integer music_genre_id;
+    private String trackId;
+    @SerializedName("music_genre_name")
     @NotNull
-    String track_id;
+    private String musicGenreName;
 
     public TrackMusicGenrePrimary(){
 
     }
-    public TrackMusicGenrePrimary(Integer music_genre_id, String track_id) {
-        this.music_genre_id = music_genre_id;
-        this.track_id = track_id;
+    public TrackMusicGenrePrimary(String trackId, String musicGenreName) {
+
+        this.trackId = trackId;
+        this.musicGenreName = musicGenreName;
     }
 
 
+    public String getTrackId() {
+        return trackId;
+    }
+
+    public String getMusicGenreName() {
+        return musicGenreName;
+    }
 }
