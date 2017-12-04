@@ -2,12 +2,18 @@ package fauzi.muhammad.musicmatch;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.orm.query.Select;
@@ -15,12 +21,12 @@ import com.orm.query.Select;
 import java.util.ArrayList;
 import java.util.List;
 
-import fauzi.muhammad.musicmatch.Music.Music;
-import fauzi.muhammad.musicmatch.Music.MusicGenreList;
-import fauzi.muhammad.musicmatch.Music.Track;
-import fauzi.muhammad.musicmatch.Music.TrackList;
-import fauzi.muhammad.musicmatch.Music.TrackMusicGenrePrimary;
-import fauzi.muhammad.musicmatch.Music.TrackMusicGenreSecondary;
+import fauzi.muhammad.musicmatch.Model.Music;
+import fauzi.muhammad.musicmatch.Model.MusicGenreList;
+import fauzi.muhammad.musicmatch.Model.Track;
+import fauzi.muhammad.musicmatch.Model.TrackList;
+import fauzi.muhammad.musicmatch.Model.TrackMusicGenrePrimary;
+import fauzi.muhammad.musicmatch.Model.TrackMusicGenreSecondary;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,20 +34,39 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     Spinner tipe;
     RecyclerView recyclerView;
+    Button button;
+    final String optionsArray[] = new String[]{
+            "Pilih Tipe", "Apa Saja", "Judul", "Artis", "Album"
+    };
+    ArrayAdapter<String> adapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tipe = findViewById(R.id.tipeSpinner);
-        String optionsArray[] = new String[]{
-            "Pilih Tipe", "Apa Saja", "Judul", "Artis", "Album"
-        };
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, optionsArray );
+        button = findViewById(R.id.buttonPencarian);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                button.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                View mView = getLayoutInflater().inflate(R.layout.dialog_search, null);
+                EditText editText = findViewById(R.id.editText);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, optionsArray);
-        tipe.setAdapter(adapter);
+                builder.setView(mView);
+                AlertDialog alertDialog = builder.create();
+
+                alertDialog.show();
+                final Spinner spinner = alertDialog.findViewById(R.id.spinner);
+                Log.d("Main", "adapter "+ adapter.getItem(0));
+                spinner.setAdapter(adapter);
+
+            }
+        });
+
         if(isConnected()){
             Log.d("AMBIL", "AMBIL DATA DARI SERVER");
 //            MusixMatch.ambilData(getMusicCallback());

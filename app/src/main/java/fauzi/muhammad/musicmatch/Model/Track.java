@@ -1,6 +1,7 @@
 
-package fauzi.muhammad.musicmatch.Music;
+package fauzi.muhammad.musicmatch.Model;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +12,7 @@ import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 
 @Table
-public class Track extends SugarRecord{
+public class Track extends SugarRecord implements Serializable {
     public Track(){
 
     }
@@ -23,7 +24,6 @@ public class Track extends SugarRecord{
         this.trackSoundcloudId = trackSoundcloudId;
         this.trackXboxmusicId = trackXboxmusicId;
         this.trackName = trackName;
-        this.trackNameTranslationList = trackNameTranslationList;
         this.trackRating = trackRating;
         this.trackLength = trackLength;
         this.commontrackId = commontrackId;
@@ -76,10 +76,6 @@ public class Track extends SugarRecord{
     @SerializedName("track_name")
     @Expose
     private String trackName;
-    @SerializedName("track_name_translation_list")
-    @Expose
-    @Ignore
-    private List<Object> trackNameTranslationList = null;
     @SerializedName("track_rating")
     @Expose
     private Integer trackRating;
@@ -224,14 +220,6 @@ public class Track extends SugarRecord{
 
     public void setTrackName(String trackName) {
         this.trackName = trackName;
-    }
-
-    public List<Object> getTrackNameTranslationList() {
-        return trackNameTranslationList;
-    }
-
-    public void setTrackNameTranslationList(List<Object> trackNameTranslationList) {
-        this.trackNameTranslationList = trackNameTranslationList;
     }
 
     public Integer getTrackRating() {

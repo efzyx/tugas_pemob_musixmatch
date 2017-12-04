@@ -1,4 +1,4 @@
-package fauzi.muhammad.musicmatch.Music;
+package fauzi.muhammad.musicmatch.Model;
 
 import com.orm.SugarRecord;
 import com.orm.dsl.NotNull;

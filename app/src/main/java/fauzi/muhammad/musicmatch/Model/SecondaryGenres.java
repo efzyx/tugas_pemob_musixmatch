@@ -1,11 +1,12 @@
 
-package fauzi.muhammad.musicmatch.Music;
+package fauzi.muhammad.musicmatch.Model;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SecondaryGenres {
+public class SecondaryGenres implements Serializable {
 
     @SerializedName("music_genre_list")
     @Expose

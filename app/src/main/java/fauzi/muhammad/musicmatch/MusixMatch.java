@@ -1,12 +1,9 @@
 package fauzi.muhammad.musicmatch;
 
-import android.util.Log;
-
 import fauzi.muhammad.musicmatch.Interface.MMClient;
-import fauzi.muhammad.musicmatch.Music.Music;
+import fauzi.muhammad.musicmatch.Model.Music;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

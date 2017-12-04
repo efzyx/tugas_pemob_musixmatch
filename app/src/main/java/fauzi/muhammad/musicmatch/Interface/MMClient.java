@@ -1,13 +1,7 @@
 package fauzi.muhammad.musicmatch.Interface;
 
 
-import com.google.gson.internal.LinkedTreeMap;
-
-import org.json.JSONObject;
-
-import java.util.List;
-
-import fauzi.muhammad.musicmatch.Music.Music;
+import fauzi.muhammad.musicmatch.Model.Music;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

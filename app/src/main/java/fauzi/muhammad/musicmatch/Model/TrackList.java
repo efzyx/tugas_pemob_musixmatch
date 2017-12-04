@@ -1,5 +1,5 @@
 
-package fauzi.muhammad.musicmatch.Music;
+package fauzi.muhammad.musicmatch.Model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
