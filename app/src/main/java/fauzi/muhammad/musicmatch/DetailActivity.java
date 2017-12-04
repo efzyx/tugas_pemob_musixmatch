@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -100,5 +103,31 @@ public class DetailActivity extends AppCompatActivity {
                 Log.d("Detail", lirikText);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_detail, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_share:
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                String content = getString(R.string.yuk)+" "+track.getTrackName()+
+                        " "+getString(R.string.disini)+"\n"+track.getTrackShareUrl() +
+                        "\n"+getString(R.string.share_watermark);
+                String subject = track.getArtistName()+" - "+track.getTrackName();
+                intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                intent.putExtra(Intent.EXTRA_TEXT, content);
+                startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+                return  true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
