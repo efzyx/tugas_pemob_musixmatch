@@ -20,14 +20,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import fauzi.muhammad.musicmatch.Model.Body;
 import fauzi.muhammad.musicmatch.Model.Lirik;
 import fauzi.muhammad.musicmatch.Model.Lyrics;
 import fauzi.muhammad.musicmatch.Model.Music;
@@ -79,15 +78,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(isConnected()){
-            Log.d("AMBIL", "AMBIL DATA DARI SERVER");
-//            MusixMatch.ambilData(getMusicCallback());
-            startProgressBar();
-            MusixMatch.ambilData(getMusicCallback());
-            return;
-        }
-        Log.d("AMBIL", "AMBIL DATA DARI DATABASE");
-        setViewList(getAllFromDB());
+        startProgressBar();
+        Log.d("AMBIL", "AMBIL DATA DARI SERVER");
+        MusixMatch.ambilData(getMusicCallback());
 
 
     }
@@ -117,9 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
     void setViewList(List<TrackList> trackList){
 
-        Log.d("MAIN", "Lagu : "+trackList.get(0).getTrack().getTrackName());
+        Log.d("MAIN", "Lagu : "+trackList.size());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new RVAdapter(this, trackList ));
         recyclerView.scrollToPosition(0);
@@ -178,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Music> call, Throwable t) {
                 Log.d("MAIN", t.getMessage());
+                setViewList(getTopTrack());
             }
 
         };
@@ -206,18 +199,27 @@ public class MainActivity extends AppCompatActivity {
         lyrics.save();
     }
 
-    List<TrackList> getAllFromDB(){
-        List<TrackList> trackLists = new ArrayList();
+    List<TrackList> getAllFromDB() throws InterruptedException {
+        Body body = new Body();
+        List<TrackList> trackLists = new ArrayList<>();
         List<Track> tracks = Select.from(Track.class).list();
         for (int i = 0; i < tracks.size(); i++) {
-            trackLists.add(new TrackList(tracks));
+            trackLists.add(new TrackList(tracks.get(i)));
+            Thread.sleep(300);
         }
+        stopProgressBar();
         return trackLists;
 
     }
 
-    void getTopTrack(){
-
+    List<TrackList> getTopTrack(){
+        List<TrackList> trackLists = new ArrayList<>();
+        List<Track> tracks = Select.from(Track.class).orderBy("track_rating desc").limit("100").list();
+        Log.d("Main", "Jumlah : "+String.valueOf(tracks.size()));
+        for (int i = 0; i < tracks.size(); i++) {
+            trackLists.add(new TrackList(tracks.get(i)));
+        }
+        return trackLists;
     }
 
     boolean isConnected(){

@@ -12,9 +12,6 @@ public class TrackList {
     @Expose
     private Track track;
 
-    public TrackList(List<Track> tracks){
-
-    }
     public TrackList(Track track){
         this.track = track;
     }

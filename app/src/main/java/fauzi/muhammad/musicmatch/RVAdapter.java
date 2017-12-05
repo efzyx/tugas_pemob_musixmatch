@@ -50,8 +50,6 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
 //        item.ratingBar.setBackgroundColor(context.getResources().getColor(R.color.pinkMu));
         item.ratingBar.setRating(track.getTrackRating()/20);
         if(position==getItemCount()){
-//            item.progressBar.setVisibility(View.INVISIBLE);
-//            item.progressBar.setVisibility(View.VISIBLE);
         }
     }
 

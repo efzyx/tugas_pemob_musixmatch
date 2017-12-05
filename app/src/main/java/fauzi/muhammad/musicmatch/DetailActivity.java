@@ -76,7 +76,7 @@ public class DetailActivity extends AppCompatActivity {
         artis.setText(track.getArtistName());
         album.setText(track.getAlbumName());
         rilis.setText(sDate);
-        durasi.setText(String.valueOf(track.getTrackLength())+getString(R.string.detik));
+        durasi.setText(String.valueOf(track.getTrackLength())+" "+getString(R.string.detik));
         Picasso.with(this).load(track.getAlbumCoverart100x100()).into(imageView);
         List<TrackMusicGenrePrimary> trackMusicGenrePrimaryList = Select.from(TrackMusicGenrePrimary.class).where(
                 Condition.prop("track_id").eq(trackId)
@@ -86,7 +86,7 @@ public class DetailActivity extends AppCompatActivity {
             genres.append(i == 0 ? trackMusicGenrePrimaryList.get(i).getMusicGenreName() :
                     ", " + trackMusicGenrePrimaryList.get(i).getMusicGenreName());
         }
-        genre.setText(genres.toString());
+        genre.setText(genres.length() > 0 ? genres.toString() : getString(R.string.no_genre));
 
         showLirik.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,9 +94,9 @@ public class DetailActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
                 @SuppressLint("InflateParams") View mView = getLayoutInflater().inflate(R.layout.lirik_dialog, null);
                 TextView lirik = mView.findViewById(R.id.textViewLirik);
-                lirik.setText(track.getHasLyrics() == 1 ? lirikText : getString(R.string.no_lyrics));
+                lirik.setText(track.getHasLyrics() == 1 ? lirikText + "\n" : getString(R.string.no_lyrics));
                 lirik.setMovementMethod(new ScrollingMovementMethod());
-                builder.setTitle(getString(R.string.lirik)+track.getTrackName());
+                builder.setTitle(getString(R.string.lirik)+" "+track.getTrackName());
                 builder.setView(mView);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
