@@ -14,12 +14,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class MusixMatch{
-     static final String baseUrl = "http://api.musixmatch.com/";
-     static Retrofit.Builder builder = new Retrofit.Builder()
+     private static final String baseUrl = "http://api.musixmatch.com/";
+     private static Retrofit.Builder builder = new Retrofit.Builder()
              .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create());
-     static final Retrofit retrofit = builder.build();
-     static MMClient mmClient = retrofit.create(MMClient.class);
+     private static final Retrofit retrofit = builder.build();
+     private static MMClient mmClient = retrofit.create(MMClient.class);
 
     static void ambilData(Callback<Music> callback){
 

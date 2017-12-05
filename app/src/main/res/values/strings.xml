@@ -3,11 +3,12 @@
     <string name="no_lyrics">Lirik tidak tersedia untuk lagu ini.</string>
     <string name="lirik">Lirik</string>
     <string name="detik">detik</string>
-    <string name="share_watermark">[Share with MusixMatch, an App by Fauzi and Lucy]</string>
+    <string name="share_watermark">[Share with MusixMatch, an App by Fauzi and Lucy (Pemob Squad)]</string>
     <string name="share_using">Share using</string>
     <string name="yuk">Yuk lihat lirik</string>
     <string name="disini">disini</string>
     <string name="no_genre">Belum ada data genre</string>
     <string name="hasil">Hasil Pencarian</string>
     <string name="lagu_populer">Lagu Populer</string>
+    <string name="no_signal">Tidak terkoneksi ke internet. Data tidak dapat diperbarui</string>
 </resources>

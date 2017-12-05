@@ -15,6 +15,7 @@ import fauzi.muhammad.musicmatch.Model.Track;
 import fauzi.muhammad.musicmatch.Model.TrackList;
 import fauzi.muhammad.musicmatch.Model.TrackMusicGenrePrimary;
 import fauzi.muhammad.musicmatch.MusixMatch;
+import fauzi.muhammad.musicmatch.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,15 +34,14 @@ public class RedownloadJobService extends JobService {
             public void onResponse(@NonNull Call<Music> call, @NonNull Response<Music> response) {
                 Music object =  response.body();
                 assert object != null;
-//                Log.d("Main", "Respon : "+response.body().getMessage().getBody().getTrackList().get(0).getTrack().getTrackName());
-
                 saveToDB(object.getMessage().getBody().getTrackList());
 
             }
 
             @Override
             public void onFailure(@NonNull Call<Music> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(), "Job stopped", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.no_signal, Toast.LENGTH_SHORT).show();
+
             }
 
         });

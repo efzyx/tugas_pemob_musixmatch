@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.orm.query.Condition;
 import com.orm.query.Select;
 import java.util.ArrayList;
@@ -92,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                              if(isConnected()){
                                  MusixMatch.ambilData(getSearchMusicCallback(t, q), t, q);
                              }else {
+                                 textView.setText(getResources().getString(R.string.hasil)+" "+q);
                                  setViewList(getTrack(t,q));
                              }
                         }else {
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     boolean actionRefresh(){
-
+        textView.setText(getResources().getString(R.string.lagu_populer));
         if(isConnected()){
             Toast.makeText(getApplicationContext(), "Refreshed! Data loaded from server", Toast.LENGTH_SHORT).show();
             MusixMatch.ambilData(getMusicCallback());

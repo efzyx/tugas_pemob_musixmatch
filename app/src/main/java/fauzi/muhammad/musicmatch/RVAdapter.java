@@ -3,6 +3,7 @@ package fauzi.muhammad.musicmatch;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,24 +34,23 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View row = inflater.inflate(R.layout.lagu_list, parent, false);
-        Item item = new Item(row, context);
-        return item;
+        return new Item(row, context);
     }
 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)  {
+        holder.itemView.setBackgroundColor(
+                holder.itemView.getResources()
+                        .getColor(position % 2 != 0 ? R.color.ganjil : R.color.genap));
         Item item = (Item) holder;
         Track track = tracks.get(position).getTrack();
-
         item.setTrackId(track.getTrackId());
         item.textViewLagu.setText(track.getTrackName());
         item.textViewArtis.setText(track.getArtistName());
         Picasso.with(context).load(track.getAlbumCoverart100x100()).into(item.imageView);
-//        item.ratingBar.setBackgroundColor(context.getResources().getColor(R.color.pinkMu));
         item.ratingBar.setRating(track.getTrackRating()/20);
-        if(position==getItemCount()){
-        }
+
     }
 
     @Override
@@ -67,7 +67,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
         RatingBar ratingBar;
         RecyclerView recyclerView;
         ProgressBar progressBar;
-        public Item(View viewItem, Context context){
+        Item(View viewItem, Context context){
             super(viewItem);
             this.context = context;
             viewItem.setOnClickListener(this);
@@ -77,7 +77,6 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
             ratingBar = viewItem.findViewById(R.id.ratingBar);
             recyclerView = viewItem.findViewById(R.id.rv_hasil_cari);
             progressBar = viewItem.findViewById(R.id.progressBar);
-
 
         }
 
@@ -91,6 +90,7 @@ public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
             intent.putExtra("track_id", trackId);
             context.startActivity(intent);
         }
+
     }
 
 }

@@ -5,5 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="pinkMu">#ff0e83</color>
     <color name="orangeTerang">#ff6633</color>
+    <color name="ganjil">#f2c7b0</color>
+    <color name="genap">#edaf97</color>
+    <color name="putih">#fcefea</color>
 
 </resources>
