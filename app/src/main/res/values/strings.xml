@@ -8,4 +8,6 @@
     <string name="yuk">Yuk lihat lirik</string>
     <string name="disini">disini</string>
     <string name="no_genre">Belum ada data genre</string>
+    <string name="hasil">Hasil Pencarian</string>
+    <string name="lagu_populer">Lagu Populer</string>
 </resources>

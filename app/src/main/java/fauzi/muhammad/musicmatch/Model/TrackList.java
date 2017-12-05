@@ -4,8 +4,6 @@ package fauzi.muhammad.musicmatch.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 public class TrackList {
 
     @SerializedName("track")

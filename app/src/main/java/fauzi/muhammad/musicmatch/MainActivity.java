@@ -20,13 +20,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.orm.query.Condition;
 import com.orm.query.Select;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import fauzi.muhammad.musicmatch.Model.Body;
+import fauzi.muhammad.musicmatch.job.JobUtils;
 import fauzi.muhammad.musicmatch.Model.Lirik;
 import fauzi.muhammad.musicmatch.Model.Lyrics;
 import fauzi.muhammad.musicmatch.Model.Music;
@@ -42,20 +42,23 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
     RecyclerView recyclerView;
     Button button;
-    final String optionsArray[] = new String[]{
-            "Pilih Tipe", "Apa Saja", "Judul", "Artis", "Album"
-    };
+    final String optionsArray[] = new String[]{"Apa Saja", "Judul", "Artis", "Lirik"};
     ArrayAdapter<String> adapter;
     ProgressBar progressBar;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        JobUtils.scheduleJob(this);
+
         adapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, optionsArray );
         textView = findViewById(R.id.textViewJudul);
+
         progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.rv_hasil_cari);
         button = findViewById(R.id.buttonPencarian);
@@ -64,23 +67,51 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 @SuppressLint("InflateParams") View mView = getLayoutInflater().inflate(R.layout.dialog_search, null);
-                EditText editText = findViewById(R.id.editText);
 
                 builder.setView(mView);
-                AlertDialog alertDialog = builder.create();
+                final AlertDialog alertDialog = builder.create();
 
                 alertDialog.show();
+                final EditText editText = alertDialog.findViewById(R.id.editText);
                 final Spinner spinner = alertDialog.findViewById(R.id.spinner);
                 Log.d("Main", "adapter "+ adapter.getItem(0));
                 assert spinner != null;
                 spinner.setAdapter(adapter);
+                final Button cari = alertDialog.findViewById(R.id.button);
+                assert cari != null;
+                cari.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onClick(View view) {
+                        startProgressBar();
+                        assert editText != null;
+                        String q = editText.getText() != null ? editText.getText().toString() : "";
+                        int t = spinner.getSelectedItemPosition();
+                        if (q.length() > 0){
+                            alertDialog.dismiss();
+                             if(isConnected()){
+                                 MusixMatch.ambilData(getSearchMusicCallback(t, q), t, q);
+                             }else {
+                                 setViewList(getTrack(t,q));
+                             }
+                        }else {
+                            Toast.makeText(getApplicationContext(), "Silahkan isi keyword!", Toast.LENGTH_SHORT).show();
+                        }
 
+                    }
+                });
             }
         });
 
         startProgressBar();
-        Log.d("AMBIL", "AMBIL DATA DARI SERVER");
-        MusixMatch.ambilData(getMusicCallback());
+
+        if(isConnected()){
+            MusixMatch.ambilData(getMusicCallback());
+            Log.d("AMBIL", "AMBIL DATA DARI SERVER");
+        }else {
+            setViewList(getTopTrack());
+        }
+
 
 
     }
@@ -96,13 +127,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_refresh:
-                if(isConnected()){
                     Log.d("AMBIL", "AMBIL DATA DARI SERVER");
                     startProgressBar();
-                    MusixMatch.ambilData(getMusicCallback());
-                    return true;
-                }
+                    return actionRefresh();
                 default:
+
                     return super.onOptionsItemSelected(item);
         }
 
@@ -114,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new RVAdapter(this, trackList ));
+        stopProgressBar();
         recyclerView.scrollToPosition(0);
     }
 
@@ -125,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
             Track track = trackList.get(i).getTrack();
             Log.d("MAIN", "Track  : " +track.getTrackName());
             List<Track> listInDb = Select.from(Track.class).where(Condition.prop("track_id").eq(track.getTrackId())).list();
-                    //Track.find(Track.class, "track_id = ?", track.getTrackId());
             Log.d("MAIN", "Track ID yang ditemukan : " +track.getTrackId());
             Log.d("MAIN", "List yang ditemukan : " +String.valueOf(listInDb.size()));
             if(listInDb.isEmpty()){
@@ -156,21 +185,44 @@ public class MainActivity extends AppCompatActivity {
         return new Callback<Music>() {
 
             @Override
-            public void onResponse(Call<Music> call, @NonNull Response<Music> response) {
+            public void onResponse(@NonNull Call<Music> call, @NonNull Response<Music> response) {
                 Music object =  response.body();
                 stopProgressBar();
                 assert object != null;
-//                Log.d("Main", "Respon : "+response.body().getMessage().getBody().getTrackList().get(0).getTrack().getTrackName());
-
                 saveToDB(object.getMessage().getBody().getTrackList());
                 setViewList(object.getMessage().getBody().getTrackList());
-
+                textView.setText(R.string.lagu_populer);
             }
 
             @Override
-            public void onFailure(Call<Music> call, Throwable t) {
+            public void onFailure(@NonNull Call<Music> call, @NonNull Throwable t) {
                 Log.d("MAIN", t.getMessage());
                 setViewList(getTopTrack());
+                textView.setText(R.string.lagu_populer);
+            }
+
+        };
+    }
+
+    Callback<Music> getSearchMusicCallback(final int tipe, final String q){
+        return new Callback<Music>() {
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call<Music> call, @NonNull Response<Music> response) {
+                Music object =  response.body();
+                stopProgressBar();
+                assert object != null;
+                saveToDB(object.getMessage().getBody().getTrackList());
+                setViewList(object.getMessage().getBody().getTrackList());
+                textView.setText(getResources().getString(R.string.hasil) + " "+ q);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onFailure(@NonNull Call<Music> call, @NonNull Throwable t) {
+                setViewList(getTrack(tipe, q));
+                textView.setText(getResources().getString(R.string.hasil) + " "+ q);
             }
 
         };
@@ -180,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
         return new Callback<Lirik>() {
 
             @Override
-            public void onResponse(Call<Lirik> call, @NonNull Response<Lirik> response) {
+            public void onResponse(@NonNull Call<Lirik> call, @NonNull Response<Lirik> response) {
                 Lirik object =  response.body();
                 assert object != null;
                 saveLirikToDB(object.getMessage().getBody().getLyrics());
@@ -188,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Lirik> call, Throwable t) {
+            public void onFailure(@NonNull Call<Lirik> call, @NonNull Throwable t) {
                 Log.d("MAIN", t.getMessage());
             }
 
@@ -197,19 +249,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveLirikToDB(Lyrics lyrics) {
         lyrics.save();
-    }
-
-    List<TrackList> getAllFromDB() throws InterruptedException {
-        Body body = new Body();
-        List<TrackList> trackLists = new ArrayList<>();
-        List<Track> tracks = Select.from(Track.class).list();
-        for (int i = 0; i < tracks.size(); i++) {
-            trackLists.add(new TrackList(tracks.get(i)));
-            Thread.sleep(300);
-        }
-        stopProgressBar();
-        return trackLists;
-
     }
 
     List<TrackList> getTopTrack(){
@@ -222,8 +261,25 @@ public class MainActivity extends AppCompatActivity {
         return trackLists;
     }
 
+    List<TrackList> getTrack(int tipe, String keyword){
+        List<TrackList> trackLists = new ArrayList<>();
+        List<Track> tracks = tipe == 1 ?
+                Select.from(Track.class).where(Condition.prop("track_name").like(keyword)).limit("100").list() :
+                tipe == 2 ? Select.from(Track.class).where(Condition.prop("artist_name").like(keyword)).limit("100").list() :
+                tipe == 3 ? Track.findWithQuery(Track.class, "select * from track join lyrics on (lyrics.lyrics_id = track.lyrics_id) " +
+                        "where lyrics.lyrics_body like '%"+keyword+"%'") :
+                        Track.findWithQuery(Track.class, "select * from track join lyrics on (lyrics.lyrics_id = track.lyrics_id) " +
+                                "where lyrics.lyrics_body like '%"+keyword+"%' or track.artist_name like '%"+keyword+"%' or track.track_name like '%"+keyword+"%'");
+        Log.d("Main", "Jumlah : "+String.valueOf(tracks.size()));
+        for (int i = 0; i < tracks.size(); i++) {
+            trackLists.add(new TrackList(tracks.get(i)));
+        }
+        return trackLists;
+    }
+
     boolean isConnected(){
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
+        assert connectivityManager != null;
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
@@ -241,4 +297,15 @@ public class MainActivity extends AppCompatActivity {
         button.setVisibility(View.VISIBLE);
     }
 
+    boolean actionRefresh(){
+
+        if(isConnected()){
+            Toast.makeText(getApplicationContext(), "Refreshed! Data loaded from server", Toast.LENGTH_SHORT).show();
+            MusixMatch.ambilData(getMusicCallback());
+            return true;
+        }
+        Toast.makeText(getApplicationContext(), "Refreshed! Data loaded from database", Toast.LENGTH_SHORT).show();
+        setViewList(getTopTrack());
+        return true;
+    }
 }

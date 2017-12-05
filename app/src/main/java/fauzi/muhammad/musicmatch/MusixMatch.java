@@ -29,13 +29,24 @@ public class MusixMatch{
 
     }
 
-    static void ambilData(Callback<Music> callback, String t){
-        Call<Music> call = mmClient.listMusicSearchByTitle(t);
+    public static void ambilDataService(Callback<Music> callback){
+
+        Call<Music> call = mmClient.listMusicPopular();
+
+        call.enqueue(callback);
+
+    }
+
+    static void ambilData(Callback<Music> callback, int tipe,  String t){
+        Call<Music> call = tipe == 1 ?  mmClient.listMusicSearchByTrack(t) :
+                tipe == 2 ? mmClient.listMusicSearchByArtist(t) :
+                tipe == 3 ? mmClient.listMusicSearchByLyrics(t) :
+                mmClient.listMusicSearchByQ(t);
 
         call.enqueue(callback);
     }
 
-    static void getLirik(Callback<Lirik> callback, String t){
+    public static void getLirik(Callback<Lirik> callback, String t){
         Call<Lirik> call = mmClient.getLirik(t);
 
         call.enqueue(callback);
