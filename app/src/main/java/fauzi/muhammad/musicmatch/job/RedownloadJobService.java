@@ -14,7 +14,7 @@ import fauzi.muhammad.musicmatch.Model.MusicGenreList;
 import fauzi.muhammad.musicmatch.Model.Track;
 import fauzi.muhammad.musicmatch.Model.TrackList;
 import fauzi.muhammad.musicmatch.Model.TrackMusicGenrePrimary;
-import fauzi.muhammad.musicmatch.MusixMatch;
+import fauzi.muhammad.musicmatch.musixmatch.MusixMatch;
 import fauzi.muhammad.musicmatch.R;
 import retrofit2.Call;
 import retrofit2.Callback;

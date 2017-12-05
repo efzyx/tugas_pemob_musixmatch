@@ -1,4 +1,4 @@
-package fauzi.muhammad.musicmatch.Interface;
+package fauzi.muhammad.musicmatch.musixmatch;
 
 
 import fauzi.muhammad.musicmatch.Model.Lirik;

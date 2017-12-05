@@ -10,10 +10,11 @@ import android.content.Context;
  */
 
 public class JobUtils {
+    private final static long PERIODIC = 1800000;
     public static void scheduleJob(Context context) {
         ComponentName serviceComponent = new ComponentName(context, RedownloadJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
-        builder.setPeriodic(60000);
+        builder.setPeriodic(PERIODIC);
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
         builder.setPersisted(true);
 

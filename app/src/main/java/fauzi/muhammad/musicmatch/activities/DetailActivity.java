@@ -1,4 +1,4 @@
-package fauzi.muhammad.musicmatch;
+package fauzi.muhammad.musicmatch.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import java.util.List;
 import fauzi.muhammad.musicmatch.Model.Lyrics;
 import fauzi.muhammad.musicmatch.Model.Track;
 import fauzi.muhammad.musicmatch.Model.TrackMusicGenrePrimary;
+import fauzi.muhammad.musicmatch.R;
 
 public class DetailActivity extends AppCompatActivity {
     TextView judul, artis, album, rilis, genre, durasi;

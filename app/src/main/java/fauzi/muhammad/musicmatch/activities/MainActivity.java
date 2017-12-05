@@ -1,4 +1,4 @@
-package fauzi.muhammad.musicmatch;
+package fauzi.muhammad.musicmatch.activities;
 
 import android.annotation.SuppressLint;
 import android.net.ConnectivityManager;
@@ -25,6 +25,10 @@ import com.orm.query.Condition;
 import com.orm.query.Select;
 import java.util.ArrayList;
 import java.util.List;
+
+import fauzi.muhammad.musicmatch.musixmatch.MusixMatch;
+import fauzi.muhammad.musicmatch.R;
+import fauzi.muhammad.musicmatch.adapter.RVAdapter;
 import fauzi.muhammad.musicmatch.job.JobUtils;
 import fauzi.muhammad.musicmatch.Model.Lirik;
 import fauzi.muhammad.musicmatch.Model.Lyrics;
@@ -38,24 +42,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String OPTIONS_ARRAY[] = new String[]{"Apa Saja", "Judul", "Artis", "Lirik"};
     TextView textView;
     RecyclerView recyclerView;
     Button button;
-    final String optionsArray[] = new String[]{"Apa Saja", "Judul", "Artis", "Lirik"};
     ArrayAdapter<String> adapter;
     ProgressBar progressBar;
-
+    RVAdapter rvAdapter;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         JobUtils.scheduleJob(this);
 
         adapter = new ArrayAdapter<>(this,
-                R.layout.spinner_item, optionsArray );
+                R.layout.spinner_item, OPTIONS_ARRAY);
         textView = findViewById(R.id.textViewJudul);
 
         progressBar = findViewById(R.id.progressBar);
@@ -89,11 +92,13 @@ public class MainActivity extends AppCompatActivity {
                         if (q.length() > 0){
                             alertDialog.dismiss();
                              if(isConnected()){
-                                 MusixMatch.ambilData(getSearchMusicCallback(t, q), t, q);
+                                  MusixMatch.ambilData(getSearchMusicCallback(t, q), t, q);
+
                              }else {
                                  textView.setText(getResources().getString(R.string.hasil)+" "+q);
                                  setViewList(getTrack(t,q));
                              }
+
                         }else {
                             Toast.makeText(getApplicationContext(), "Silahkan isi keyword!", Toast.LENGTH_SHORT).show();
                         }
@@ -113,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,12 +142,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     void setViewList(List<TrackList> trackList){
 
         Log.d("MAIN", "Lagu : "+trackList.size());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new RVAdapter(this, trackList ));
+        rvAdapter = new RVAdapter(this, trackList);
+        recyclerView.setAdapter(rvAdapter);
         stopProgressBar();
         recyclerView.scrollToPosition(0);
     }
@@ -291,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
         button.setVisibility(View.INVISIBLE);
     }
     void stopProgressBar(){
+        Log.d("Mausk", "Masuk stop progress");
         recyclerView.setVisibility(View.VISIBLE);
         textView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);

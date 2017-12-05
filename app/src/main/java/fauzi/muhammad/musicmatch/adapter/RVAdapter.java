@@ -1,9 +1,8 @@
-package fauzi.muhammad.musicmatch;
+package fauzi.muhammad.musicmatch.adapter;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,8 @@ import java.util.List;
 
 import fauzi.muhammad.musicmatch.Model.Track;
 import fauzi.muhammad.musicmatch.Model.TrackList;
+import fauzi.muhammad.musicmatch.R;
+import fauzi.muhammad.musicmatch.activities.DetailActivity;
 
 /**
  * Created by fauzi on 02/12/2017.
@@ -26,7 +27,7 @@ import fauzi.muhammad.musicmatch.Model.TrackList;
 public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
     private Context context;
     private List<TrackList> tracks;
-    RVAdapter(Context context, List<TrackList> trackList){
+    public RVAdapter(Context context, List<TrackList> trackList){
         this.tracks = trackList;
         this.context = context;
     }

@@ -1,6 +1,6 @@
-package fauzi.muhammad.musicmatch;
+package fauzi.muhammad.musicmatch.musixmatch;
 
-import fauzi.muhammad.musicmatch.Interface.MMClient;
+import fauzi.muhammad.musicmatch.musixmatch.MMClient;
 import fauzi.muhammad.musicmatch.Model.Lirik;
 import fauzi.muhammad.musicmatch.Model.Music;
 import retrofit2.Call;
@@ -21,7 +21,7 @@ public class MusixMatch{
      private static final Retrofit retrofit = builder.build();
      private static MMClient mmClient = retrofit.create(MMClient.class);
 
-    static void ambilData(Callback<Music> callback){
+    public static void ambilData(Callback<Music> callback){
 
         Call<Music> call = mmClient.listMusicPopular();
 
@@ -37,7 +37,7 @@ public class MusixMatch{
 
     }
 
-    static void ambilData(Callback<Music> callback, int tipe,  String t){
+    public static void ambilData(Callback<Music> callback, int tipe,  String t){
         Call<Music> call = tipe == 1 ?  mmClient.listMusicSearchByTrack(t) :
                 tipe == 2 ? mmClient.listMusicSearchByArtist(t) :
                 tipe == 3 ? mmClient.listMusicSearchByLyrics(t) :
