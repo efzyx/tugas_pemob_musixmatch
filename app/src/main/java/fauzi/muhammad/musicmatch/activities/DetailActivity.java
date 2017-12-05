@@ -23,9 +23,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import fauzi.muhammad.musicmatch.Model.Lyrics;
-import fauzi.muhammad.musicmatch.Model.Track;
-import fauzi.muhammad.musicmatch.Model.TrackMusicGenrePrimary;
+import fauzi.muhammad.musicmatch.models.Lyrics;
+import fauzi.muhammad.musicmatch.models.Track;
+import fauzi.muhammad.musicmatch.models.TrackMusicGenrePrimary;
 import fauzi.muhammad.musicmatch.R;
 
 public class DetailActivity extends AppCompatActivity {

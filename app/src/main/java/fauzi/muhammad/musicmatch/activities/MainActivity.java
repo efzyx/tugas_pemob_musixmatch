@@ -29,14 +29,13 @@ import java.util.List;
 import fauzi.muhammad.musicmatch.musixmatch.MusixMatch;
 import fauzi.muhammad.musicmatch.R;
 import fauzi.muhammad.musicmatch.adapter.RVAdapter;
-import fauzi.muhammad.musicmatch.job.JobUtils;
-import fauzi.muhammad.musicmatch.Model.Lirik;
-import fauzi.muhammad.musicmatch.Model.Lyrics;
-import fauzi.muhammad.musicmatch.Model.Music;
-import fauzi.muhammad.musicmatch.Model.MusicGenreList;
-import fauzi.muhammad.musicmatch.Model.Track;
-import fauzi.muhammad.musicmatch.Model.TrackList;
-import fauzi.muhammad.musicmatch.Model.TrackMusicGenrePrimary;
+import fauzi.muhammad.musicmatch.models.Lirik;
+import fauzi.muhammad.musicmatch.models.Lyrics;
+import fauzi.muhammad.musicmatch.models.Music;
+import fauzi.muhammad.musicmatch.models.MusicGenreList;
+import fauzi.muhammad.musicmatch.models.Track;
+import fauzi.muhammad.musicmatch.models.TrackList;
+import fauzi.muhammad.musicmatch.models.TrackMusicGenrePrimary;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        JobUtils.scheduleJob(this);
-
         adapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, OPTIONS_ARRAY);
         textView = findViewById(R.id.textViewJudul);

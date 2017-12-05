@@ -15,8 +15,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import fauzi.muhammad.musicmatch.Model.Track;
-import fauzi.muhammad.musicmatch.Model.TrackList;
+import fauzi.muhammad.musicmatch.models.Track;
+import fauzi.muhammad.musicmatch.models.TrackList;
 import fauzi.muhammad.musicmatch.R;
 import fauzi.muhammad.musicmatch.activities.DetailActivity;
 

@@ -1,5 +1,5 @@
 
-package fauzi.muhammad.musicmatch.Model;
+package fauzi.muhammad.musicmatch.models;
 
 import java.io.Serializable;
 

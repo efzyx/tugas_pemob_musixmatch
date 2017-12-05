@@ -1,8 +1,7 @@
 package fauzi.muhammad.musicmatch.musixmatch;
 
-import fauzi.muhammad.musicmatch.musixmatch.MMClient;
-import fauzi.muhammad.musicmatch.Model.Lirik;
-import fauzi.muhammad.musicmatch.Model.Music;
+import fauzi.muhammad.musicmatch.models.Lirik;
+import fauzi.muhammad.musicmatch.models.Music;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;

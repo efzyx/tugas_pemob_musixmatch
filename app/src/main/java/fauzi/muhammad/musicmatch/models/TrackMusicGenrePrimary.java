@@ -1,4 +1,4 @@
-package fauzi.muhammad.musicmatch.Model;
+package fauzi.muhammad.musicmatch.models;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
