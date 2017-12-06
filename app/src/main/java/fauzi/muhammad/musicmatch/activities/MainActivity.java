@@ -82,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onClick(View view) {
-                        startProgressBar();
                         assert editText != null;
                         String q = editText.getText() != null ? editText.getText().toString() : "";
                         int t = spinner.getSelectedItemPosition();
                         if (q.length() > 0){
+                            startProgressBar();
                             alertDialog.dismiss();
                              if(isConnected()){
                                   MusixMatch.ambilData(getSearchMusicCallback(t, q), t, q);
